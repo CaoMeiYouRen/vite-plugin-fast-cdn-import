@@ -1,5 +1,12 @@
 # vite-plugin-fast-cdn-import
 
+# [1.1.0](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import/compare/v1.0.2...v1.1.0) (2022-11-20)
+
+
+### ✨ 新功能
+
+* 新增 全量竞速功能 ([f60d4af](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import/commit/f60d4af))
+
 ## [1.0.2](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import/compare/v1.0.1...v1.0.2) (2022-11-20)
 
 
