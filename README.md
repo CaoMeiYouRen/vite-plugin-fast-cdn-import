@@ -59,7 +59,7 @@ export default defineConfig({
         vue(),
         tsconfigPaths(),
         vitePluginFastCdnImport({ // 添加依赖即可
-            cdnUrls: [ // 指定 css 源
+            cdnUrls: [ // 指定 CDN 源
                 'https://npm.elemecdn.com/:name@:version/:path',
                 'https://cdn.jsdelivr.net/npm/:name@:version/:path',
                 'https://unpkg.com/:name@:version/:path',
