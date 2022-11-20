@@ -20,6 +20,8 @@
 
 
 > 从多个 CDN 中找出最快的源并加载资源
+>
+> Find the fastest source from multiple CDNs and load resources
 
 ### 🏠 [主页](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import#readme)
 
@@ -44,9 +46,73 @@ npm install vite-plugin-fast-cdn-import
 
 ## 使用
 
-```sh
-npm run start
+```ts
+// vite.config.ts
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import tsconfigPaths from 'vite-tsconfig-paths'
+import { vitePluginFastCdnImport } from 'vite-plugin-fast-cdn-import'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+    plugins: [
+        vue(),
+        tsconfigPaths(),
+        vitePluginFastCdnImport({ // 添加依赖即可
+            cdnUrls: [ // 指定 css 源
+                'https://npm.elemecdn.com/:name@:version/:path',
+                'https://cdn.jsdelivr.net/npm/:name@:version/:path',
+                'https://unpkg.com/:name@:version/:path',
+            ],
+            modules: [ // 目前仅支持 css 的加载
+                {
+                    name: 'normalize.css',
+                    path: 'normalize.css',
+                },
+                {
+                    name: 'element-plus',
+                    path: 'dist/index.css',
+                },
+            ],
+        }),
+    ],
+    server: {
+        port: 4000,
+        open: true,
+        proxy: {},
+    },
+})
+
+
 ```
+
+### 类型参考
+
+```ts
+export interface Module {
+    name: string //包的名称
+    version?: string //可选，以手动填写为准，默认会去 node_modules 下获取已安装的版本号
+    path: string // 需要加载的资源路径
+    cssOnly?: true // 是否为纯 css ，当前版本仅支持 css 的动态加载
+}
+
+export interface Options {
+    modules: Module[]
+    cdnUrls?: string[]
+    disabled?: boolean
+}
+```
+
+###  基本原理
+
+在指定的多个 CDN 源中，会使用 `fetch`对第一个包的地址进行一次 `HEAD` 请求，得出最快的源，剩余的包不再竞速，直接采用该结果。
+
+第一次的竞速结果会缓存在 `localStorage` 中，直到包的数量或版本号发生了改变，此时缓存失效，重复上述流程。
+
+### 存在的问题
+
+1. 由本项目的竞速原理可知，只会对第一个包进行竞速，因此可能会出现第一个包在某个 CDN 源是存在的，后续的包不存在，导致加载失败，故需要开发者手动对所有 CDN 源进行校验，确保所有的包都能在所有 CDN 源加载。
+2. 由于用到了 `fetch`，所以在不支持 `fetch` 的浏览器下无法竞速，也就无法加载包。
 
 ## 开发
 
