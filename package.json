@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-fast-cdn-import",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "从多个 CDN 中找出最快的源并加载资源",
   "author": "CaoMeiYouRen",
   "private": false,
