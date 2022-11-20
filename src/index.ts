@@ -1,5 +1,5 @@
+/* eslint-disable no-sync */
 import path from 'path'
-import fsp from 'fs/promises'
 import fs from 'fs'
 import { Plugin } from 'vite'
 import { Options } from './types'
@@ -14,12 +14,11 @@ const DEFAULT_CDN_URLS = [
  * @param name
  * @returns
  */
-async function getModuleVersion(name: string): Promise<string> {
+function getModuleVersion(name: string): string {
     const pwd = process.cwd()
     const pkgFile = path.join(pwd, 'node_modules', name, 'package.json')
-    // eslint-disable-next-line no-sync
     if (fs.existsSync(pkgFile)) {
-        const pkgJson = JSON.parse(await fsp.readFile(pkgFile, 'utf8'))
+        const pkgJson = JSON.parse(fs.readFileSync(pkgFile, 'utf8'))
         console.log(name, pkgJson.version)
         return pkgJson.version
     }
@@ -27,16 +26,16 @@ async function getModuleVersion(name: string): Promise<string> {
     return ''
 }
 
-export async function vitePluginFastCdnImport(options: Options): Promise<Plugin> {
+export function vitePluginFastCdnImport(options: Options): Plugin {
     const { modules = [], cdnUrls = DEFAULT_CDN_URLS, disabled = false } = options
-    const injectJs = await fsp.readFile(path.join(__dirname, './client.js'), 'utf-8')
+    const injectJs = fs.readFileSync(path.join(__dirname, './client.js'), 'utf-8')
     // 从 CDN 导入
     // 目前只支持 css
-    const cssModule = await Promise.all(modules.filter((m) => m.cssOnly ?? true)
+    const cssModule = modules.filter((m) => m.cssOnly ?? true)
         .map(async (m) => ({
             ...m,
-            version: m.version || await getModuleVersion(m.name),
-        })))
+            version: m.version || getModuleVersion(m.name),
+        }))
     return {
         name: 'vite-plugin-fast-cdn-import',
         enforce: 'post', // 前置调用
