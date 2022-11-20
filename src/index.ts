@@ -19,10 +19,8 @@ function getModuleVersion(name: string): string {
     const pkgFile = path.join(pwd, 'node_modules', name, 'package.json')
     if (fs.existsSync(pkgFile)) {
         const pkgJson = JSON.parse(fs.readFileSync(pkgFile, 'utf8'))
-        console.log(name, pkgJson.version)
         return pkgJson.version
     }
-
     return ''
 }
 
@@ -39,7 +37,6 @@ export function vitePluginFastCdnImport(options: Options): Plugin {
     return {
         name: 'vite-plugin-fast-cdn-import',
         enforce: 'post', // 前置调用
-        // apply: 'build', // 仅生产环境调用
         transformIndexHtml(html) {
             if (disabled) {
                 return html
