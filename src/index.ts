@@ -30,13 +30,13 @@ export function vitePluginFastCdnImport(options: Options): Plugin {
     // 从 CDN 导入
     // 目前只支持 css
     const cssModule = modules.filter((m) => m.cssOnly ?? true)
-        .map(async (m) => ({
+        .map((m) => ({
             ...m,
             version: m.version || getModuleVersion(m.name),
         }))
     return {
         name: 'vite-plugin-fast-cdn-import',
-        enforce: 'post', // 前置调用
+        enforce: 'post',
         transformIndexHtml(html) {
             if (disabled) {
                 return html
