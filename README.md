@@ -93,13 +93,31 @@ export interface Module {
     name: string //包的名称
     version?: string //可选，以手动填写为准，默认会去 node_modules 下获取已安装的版本号
     path: string // 需要加载的资源路径
-    cssOnly?: true // 是否为纯 css ，当前版本仅支持 css 的动态加载
+    cssOnly?: boolean // 是否为纯 css ，当前版本仅支持 css 的动态加载
 }
 
 export interface Options {
+    /**
+     * 要加载的包
+     */
     modules: Module[]
+    /**
+     * CDN 的地址，格式：https://unpkg.com/:name@:version/:path
+     */
     cdnUrls?: string[]
+    /**
+     * 禁用本插件注入js
+     */
     disabled?: boolean
+    /**
+     * 全量竞速，即对每一个包都进行一次竞速
+     */
+    allRace?: boolean
+
+    /**
+     * 手动指定缓存key，改变cacheKey会使之前的缓存失效
+     */
+    cacheKey?: string
 }
 ```
 
@@ -111,7 +129,7 @@ export interface Options {
 
 ### 存在的问题
 
-1. 由本项目的竞速原理可知，只会对第一个包进行竞速，因此可能会出现第一个包在某个 CDN 源是存在的，后续的包不存在，导致加载失败，故需要开发者手动对所有 CDN 源进行校验，确保所有的包都能在所有 CDN 源加载。
+1. ~~由本项目的竞速原理可知，只会对第一个包进行竞速，因此可能会出现第一个包在某个 CDN 源是存在的，后续的包不存在，导致加载失败，故需要开发者手动对所有 CDN 源进行校验，确保所有的包都能在所有 CDN 源加载。~~ 可在配置中设置 `allRace`为 `true`启用全量竞速，会对每一个包都单独竞速。虽然可以解决包不存在的问题，但也多了竞速的耗时，请开发者自行权衡。
 2. 由于用到了 `fetch`，所以在不支持 `fetch` 的浏览器下无法竞速，也就无法加载包。
 
 ## 开发

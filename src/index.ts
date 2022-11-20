@@ -25,15 +25,7 @@ function getModuleVersion(name: string): string {
 }
 
 export function vitePluginFastCdnImport(options: Options): Plugin {
-    const { modules = [], cdnUrls = DEFAULT_CDN_URLS, disabled = false } = options
-    const injectJs = fs.readFileSync(path.join(__dirname, './client.js'), 'utf-8')
-    // 从 CDN 导入
-    // 目前只支持 css
-    const cssModule = modules.filter((m) => m.cssOnly ?? true)
-        .map((m) => ({
-            ...m,
-            version: m.version || getModuleVersion(m.name),
-        }))
+    const { modules = [], cdnUrls = DEFAULT_CDN_URLS, disabled = false, allRace = false, cacheKey } = options
     return {
         name: 'vite-plugin-fast-cdn-import',
         enforce: 'post',
@@ -41,7 +33,16 @@ export function vitePluginFastCdnImport(options: Options): Plugin {
             if (disabled) {
                 return html
             }
-            const code = `<script type="module">${injectJs.replace('window.__FAST_CDN_URLS__', JSON.stringify(cdnUrls)).replace('window.__FAST_CDN_MODULES__', JSON.stringify(cssModule))}</script>`
+            const injectJs = fs.readFileSync(path.join(__dirname, './client.js'), 'utf-8')
+            // 目前只支持 css
+            const cssModule = modules.map((m) => ({
+                ...m,
+                version: m.version || getModuleVersion(m.name),
+            }))
+            const code = `<script type="module">${injectJs.replace('window.__FAST_CDN_URLS__', JSON.stringify(cdnUrls))
+                .replace('window.__FAST_CDN_MODULES__', JSON.stringify(cssModule))
+                .replace('window.__FAST_CDN_ALL_RACE__', JSON.stringify(allRace))
+                .replace('window.__FAST_CDN_CACHE_KEY__', JSON.stringify(cacheKey))}</script>`
             return html.replace(
                 /<\/title>/i,
                 `\n</title>${code}`,
