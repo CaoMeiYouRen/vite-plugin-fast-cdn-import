@@ -47,6 +47,14 @@ export interface Options {
      * @date 2022-11-20
      */
     disabled?: boolean
+
+    /**
+     * 禁用缓存
+     *
+     * @author CaoMeiYouRen
+     * @date 2022-11-22
+     */
+    disabledCache?: boolean
     /**
      * 全量竞速，即对每一个包都进行一次竞速
      *

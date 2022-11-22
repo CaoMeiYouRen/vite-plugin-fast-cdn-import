@@ -25,7 +25,7 @@ function getModuleVersion(name: string): string {
 }
 
 export function vitePluginFastCdnImport(options: Options): Plugin {
-    const { modules = [], cdnUrls = DEFAULT_CDN_URLS, disabled = false, allRace = false, cacheKey } = options
+    const { modules = [], cdnUrls = DEFAULT_CDN_URLS, disabled = false, allRace = false, cacheKey, disabledCache = false } = options
     return {
         name: 'vite-plugin-fast-cdn-import',
         enforce: 'post',
@@ -39,13 +39,15 @@ export function vitePluginFastCdnImport(options: Options): Plugin {
                 ...m,
                 version: m.version || getModuleVersion(m.name),
             }))
-            const code = `<script type="module">${injectJs.replace('window.__FAST_CDN_URLS__', JSON.stringify(cdnUrls))
+            const code = `\n<script type="module">${injectJs.replace('window.__FAST_CDN_URLS__', JSON.stringify(cdnUrls))
                 .replace('window.__FAST_CDN_MODULES__', JSON.stringify(cssModule))
                 .replace('window.__FAST_CDN_ALL_RACE__', JSON.stringify(allRace))
-                .replace('window.__FAST_CDN_CACHE_KEY__', JSON.stringify(cacheKey))}</script>`
+                .replace('window.__FAST_CDN_CACHE_KEY__', JSON.stringify(cacheKey))
+                .replace('window.__FAST_CDN_DISABLED_CACHE__', JSON.stringify(disabledCache))}
+                </script>`
             return html.replace(
                 /<\/title>/i,
-                `\n</title>${code}`,
+                `</title>${code}`,
             )
         },
     }

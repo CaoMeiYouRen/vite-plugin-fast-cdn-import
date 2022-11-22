@@ -11,4 +11,6 @@ declare interface Window {
     __FAST_CDN_MODULES__?: Module[]
     __FAST_CDN_CACHE_KEY__?: string
     __FAST_CDN_ALL_RACE__?: boolean
+    __FAST_CDN_DISABLED_CACHE__?: boolean
+
 }
