@@ -6,7 +6,6 @@
   "private": false,
   "license": "MIT",
   "main": "dist/index.js",
-  "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist"

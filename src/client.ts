@@ -75,18 +75,26 @@ async function getFastCdn(cdnUrls: string[], module: Module): Promise<FastUrl | 
  * @param urls
  */
 async function getFastUrl(urls: string[]) {
-    return Promise.any(urls.map((url) => Promise.race([
-        fetch(url, {
-            method: 'HEAD',
-            headers: {},
-            body: null,
-        }).then((resp) => resp.url),
-        new Promise<void>((resolve, reject) => {
-            setTimeout(() => {
-                reject(new Error('Ajax timeout!'))
-            }, 15 * 1000)
-        }),
-    ])))
+    const controller = new AbortController()
+    const signal = controller.signal
+    return Promise.any(urls.map((url) => Promise.race(
+        [
+            fetch(url, {
+                method: 'HEAD',
+                signal,
+            }).then((resp) => {
+                controller.abort()
+                return resp.url
+            }).catch((error) => {
+                console.error(error)
+            }),
+            new Promise<void>((resolve, reject) => {
+                setTimeout(() => {
+                    reject(new Error('Ajax timeout!'))
+                }, 10 * 1000)
+            }),
+        ],
+    )))
 }
 
 function includeLinkStyle(url: string) {
