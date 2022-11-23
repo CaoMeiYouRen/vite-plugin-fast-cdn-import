@@ -1,5 +1,12 @@
 # vite-plugin-fast-cdn-import
 
+## [1.1.2](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import/compare/v1.1.1...v1.1.2) (2022-11-23)
+
+
+### 🐛 Bug 修复
+
+* 修改 不为 aborted 的 error 改为向上抛出异常 ([0ccd886](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import/commit/0ccd886))
+
 ## [1.1.1](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import/compare/v1.1.0...v1.1.1) (2022-11-22)
 
 
