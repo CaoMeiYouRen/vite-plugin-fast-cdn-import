@@ -104,7 +104,7 @@ async function ajaxHead(config: AjaxConfig) {
                     if (error?.message?.includes('aborted')) {
                         return
                     }
-                    console.error(error)
+                    throw error
                 }),
             new Promise<void>((resolve, reject) => {
                 setTimeout(() => {
