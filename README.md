@@ -6,7 +6,7 @@
   <a href="https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import/actions?query=workflow%3ARelease" target="_blank">
     <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/CaoMeiYouRen/vite-plugin-fast-cdn-import/Release">
   </a>
-  <img src="https://img.shields.io/badge/node-%3E%3D12-blue.svg" />
+  <img src="https://img.shields.io/badge/node-%3E%3D14-blue.svg" />
   <a href="https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import#readme" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
   </a>
@@ -36,7 +36,7 @@
 ## 依赖要求
 
 
-- node >=12
+- node >=14
 
 ## 浏览器要求情况（同 vite3）
 
