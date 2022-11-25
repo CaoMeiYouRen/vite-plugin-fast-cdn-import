@@ -1,5 +1,12 @@
 # vite-plugin-fast-cdn-import
 
+## [1.1.3](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import/compare/v1.1.2...v1.1.3) (2022-11-25)
+
+
+### 🐛 Bug 修复
+
+* 新增 keywords；修改 最低 node 版本为 14 ([eeb0b0b](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import/commit/eeb0b0b))
+
 ## [1.1.2](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import/compare/v1.1.1...v1.1.2) (2022-11-23)
 
 
