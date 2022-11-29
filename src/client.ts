@@ -1,5 +1,10 @@
 import { FastUrl, Module } from './types'
 
+function renderUrl(url: string, info: { name: string, version: string, path: string }) {
+    const { name, version, path } = info
+    return url.replace(':name', name).replace(':version', version).replace(':path', path)
+}
+
 /**
  * 获取所有包最快的源，获取失败的包返回空字符串
  *
@@ -32,7 +37,7 @@ async function getFastCdns(cdnUrls: string[], modules: Module[], allRace: boolea
                 const { name, version, path, cssOnly = true } = module
                 return {
                     cssOnly,
-                    url: fastCdn.replace(':name', name).replace(':version', version).replace(':path', path),
+                    url: renderUrl(fastCdn, { name, version, path }),
                 }
             }))
         }
@@ -51,7 +56,7 @@ async function getFastCdns(cdnUrls: string[], modules: Module[], allRace: boolea
 async function getFastCdn(cdnUrls: string[], module: Module): Promise<FastUrl | null> {
     try {
         const { name, version, path, cssOnly = true } = module
-        const urls = cdnUrls.map((cdnUrl) => cdnUrl.replace(':name', name).replace(':version', version).replace(':path', path))
+        const urls = cdnUrls.map((cdnUrl) => renderUrl(cdnUrl, { name, version, path }))
         const fast = await getFastUrl(urls)
         if (!fast) {
             console.error(`包 ${name} 未能获取到最快 CDN`)
@@ -113,24 +118,6 @@ async function ajaxHead(config: AjaxConfig) {
             }),
         ],
     )
-}
-/**
- * 校验 url 有效性
- *
- * @author CaoMeiYouRen
- * @date 2022-11-22
- * @param url
- */
-async function checkUrl(url: string) {
-    try {
-        const resp = await ajaxHead({
-            url,
-        })
-        return Boolean(resp)
-    } catch (error) {
-        console.error(error)
-        return false
-    }
 }
 
 function includeLinkStyle(url: string) {

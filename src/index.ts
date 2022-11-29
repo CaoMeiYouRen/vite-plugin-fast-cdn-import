@@ -34,13 +34,12 @@ export function vitePluginFastCdnImport(options: Options): Plugin {
                 return html
             }
             const injectJs = fs.readFileSync(path.join(__dirname, './client.js'), 'utf-8')
-            // 目前只支持 css
-            const cssModule = modules.map((m) => ({
+            const cdnModules = modules.map((m) => ({
                 ...m,
-                version: m.version || getModuleVersion(m.name),
+                version: m.version || getModuleVersion(m.name), // 获取版本号
             }))
             const code = `\n<script type="module">${injectJs.replace('window.__FAST_CDN_URLS__', JSON.stringify(cdnUrls))
-                .replace('window.__FAST_CDN_MODULES__', JSON.stringify(cssModule))
+                .replace('window.__FAST_CDN_MODULES__', JSON.stringify(cdnModules))
                 .replace('window.__FAST_CDN_ALL_RACE__', JSON.stringify(allRace))
                 .replace('window.__FAST_CDN_CACHE_KEY__', JSON.stringify(cacheKey))
                 .replace('window.__FAST_CDN_DISABLED_CACHE__', JSON.stringify(disabledCache))}
