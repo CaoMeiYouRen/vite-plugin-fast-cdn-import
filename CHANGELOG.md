@@ -1,5 +1,17 @@
 # vite-plugin-fast-cdn-import
 
+# [1.2.0](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import/compare/v1.1.3...v1.2.0) (2022-11-29)
+
+
+### ♻ 代码重构
+
+* 优化代码结构 ([2c5ea75](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import/commit/2c5ea75))
+
+
+### ✨ 新功能
+
+* 增加了 js 脚本支持；优化了缓存 key；优化了加载模式 ([2ca939e](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import/commit/2ca939e))
+
 ## [1.1.3](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import/compare/v1.1.2...v1.1.3) (2022-11-25)
 
 
