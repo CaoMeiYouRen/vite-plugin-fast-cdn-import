@@ -47,6 +47,7 @@
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/git": "^10.0.1",
     "@types/debug": "^4.1.7",
+    "@types/md5": "^2.3.2",
     "@types/node": "^18.11.9",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "@typescript-eslint/parser": "^5.43.0",
@@ -98,6 +99,8 @@
     "access": "public"
   },
   "dependencies": {
+    "md5": "^2.3.0",
+    "rollup-plugin-external-globals": "^0.7.1",
     "tslib": "^2.4.1"
   },
   "peerDependencies": {

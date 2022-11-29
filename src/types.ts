@@ -13,8 +13,19 @@ export interface Module {
      * @date 2022-11-20
      */
     version?: string
-    // var?: string
-    // 需要加载的资源路径，相对于包的地址
+    /**
+    * 以外部包形式载入时的全局变量名称
+    *
+    * @author CaoMeiYouRen
+    * @date 2022-11-29
+    */
+    var?: string
+    /**
+     * 需要加载的资源路径，相对于包的地址
+     *
+     * @author CaoMeiYouRen
+     * @date 2022-11-29
+     */
     path: string
     /**
      * 是否为纯 css
@@ -23,6 +34,14 @@ export interface Module {
      * @date 2022-11-20
      */
     cssOnly?: boolean
+
+    /**
+     * 是否为 es module
+     *
+     * @author CaoMeiYouRen
+     * @date 2022-11-29
+     */
+    esModule?: boolean
 }
 
 export interface Options {
@@ -73,6 +92,7 @@ export interface Options {
 }
 
 export interface FastUrl {
-    cssOnly: boolean
     url: string
+    cssOnly?: boolean
+    esModule?: boolean
 }

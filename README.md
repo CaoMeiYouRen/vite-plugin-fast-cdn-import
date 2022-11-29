@@ -23,6 +23,8 @@
 >
 > Find the fastest source from multiple CDNs and load resources
 
+**目前本插件不支持 js 包的加载，仅支持 css 包的加载！！**
+
 ### 🏠 [主页](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import#readme)
 
 [https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import#readme](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import#readme)
@@ -98,10 +100,30 @@ export default defineConfig({
 
 ```ts
 export interface Module {
-    name: string //包的名称
-    version?: string //可选，以手动填写为准，默认会去 node_modules 下获取已安装的版本号
-    path: string // 需要加载的资源路径
-    cssOnly?: boolean // 是否为纯 css ，当前版本仅支持 css 的动态加载
+    /**
+     * 包的名称
+     */
+    name: string
+    /**
+     * 以手动填写为准，默认会去 node_modules 下获取已安装的版本号
+     */
+    version?: string
+    /**
+    * 以外部包形式载入时的全局变量名称，载入的资源是 js 时使用
+    */
+    var?: string
+    /**
+     * 需要加载的资源路径，相对于包的地址
+     */
+    path: string
+    /**
+     * 是否为纯 css
+     */
+    cssOnly?: boolean
+      /**
+     * 是否为 es module
+     */
+    esModule?: boolean
 }
 
 export interface Options {
@@ -114,7 +136,7 @@ export interface Options {
      */
     cdnUrls?: string[]
     /**
-     * 禁用本插件注入js
+     * 禁用本插件
      */
     disabled?: boolean
     /**
@@ -141,6 +163,7 @@ export interface Options {
 2. 由于用到了 `fetch`，所以在不支持 `fetch` 的浏览器下无法竞速，也就无法加载包。
 3. 由于用到了 `Promise.race`、`Promise.any`，所以在不支持 `Promise.race`、`Promise.any` 的浏览器中需要 `polyfill` 才能使用
 4. 当缓存里的 CDN 源失效时，无法**自动**检测出失效的 CDN 源，此时会出现加载资源失败的情况。—— 该问题可通过**手动**修改 `cacheKey` 来解决。
+5. 本插件需要在 html 注入一段 js，增加了 html 的体积。
 
 ## 开发
 
@@ -188,6 +211,12 @@ npm run commit
 
 Copyright © 2022 [CaoMeiYouRen](https://github.com/CaoMeiYouRen).<br />
 This project is [MIT](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import/blob/master/LICENSE) licensed.
+
+## 项目参考
+
+- [vite-plugin-cdn-import](https://github.com/mmf-fe/vite-plugin-cdn-import)
+- [webpack-cdn-plugin](https://github.com/shirotech/webpack-cdn-plugin) 
+- [rollup-plugin-external-globals](https://github.com/eight04/rollup-plugin-external-globals)
 
 ***
 _This README was generated with ❤️ by [cmyr-template-cli](https://github.com/CaoMeiYouRen/cmyr-template-cli)_

@@ -34,9 +34,10 @@ async function getFastCdns(cdnUrls: string[], modules: Module[], allRace: boolea
         const fastCdn = cdnUrls.find((cdnUrl) => new URL(cdnUrl).host === new URL(fastUrl.url).host)
         if (fastCdn) {
             fastUrls.push(...pkgs.map((module) => {
-                const { name, version, path, cssOnly = true } = module
+                const { name, version, path, cssOnly, esModule } = module
                 return {
                     cssOnly,
+                    esModule,
                     url: renderUrl(fastCdn, { name, version, path }),
                 }
             }))
@@ -55,7 +56,7 @@ async function getFastCdns(cdnUrls: string[], modules: Module[], allRace: boolea
  */
 async function getFastCdn(cdnUrls: string[], module: Module): Promise<FastUrl | null> {
     try {
-        const { name, version, path, cssOnly = true } = module
+        const { name, version, path, cssOnly, esModule } = module
         const urls = cdnUrls.map((cdnUrl) => renderUrl(cdnUrl, { name, version, path }))
         const fast = await getFastUrl(urls)
         if (!fast) {
@@ -64,6 +65,7 @@ async function getFastCdn(cdnUrls: string[], module: Module): Promise<FastUrl | 
         }
         return {
             cssOnly,
+            esModule,
             url: fast,
         }
     } catch (error) {
@@ -125,8 +127,21 @@ function includeLinkStyle(url: string) {
     link.rel = 'stylesheet'
     link.type = 'text/css'
     link.href = url
-    document?.getElementsByTagName('head')[0]?.appendChild(link)
+    document.getElementsByTagName('head')?.[0]?.appendChild(link)
     return link
+}
+
+function includeJavaScript(url: string, esModule?: boolean) {
+    const script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.src = url
+    if (esModule) {
+        script.type = 'module'
+    }
+    // document.getElementsByTagName('head')?.[0]?.appendChild(script)\
+    const s = document.getElementsByTagName('script')[0]
+    s.parentNode.insertBefore(script, s)
+    return script
 }
 
 function setLocalStorage(key: string, value: any) {
@@ -148,18 +163,20 @@ async function init() {
     const disabledCache = window.__FAST_CDN_DISABLED_CACHE__ ?? false
     const cacheKey = window.__FAST_CDN_CACHE_KEY__ || `${cdnUrls.join(',')}__${modules.map((e) => `${e.name}@${e.version}`).join(',')}`
 
-    let urls = getLocalStorage<FastUrl[]>(cacheKey)
-    if (disabledCache || !urls?.length) { // 如果 禁用缓存 或 没有缓存 就竞速
-        urls = (await getFastCdns(
+    let fastUrls = getLocalStorage<FastUrl[]>(cacheKey)
+    if (disabledCache || !fastUrls?.length) { // 如果 禁用缓存 或 没有缓存 就竞速
+        fastUrls = (await getFastCdns(
             cdnUrls,
             modules,
             allRace,
         ))?.filter(Boolean)
-        setLocalStorage(cacheKey, urls)
+        setLocalStorage(cacheKey, fastUrls)
     }
-    urls.forEach((url) => { // 加载
-        if (url.cssOnly) {
-            includeLinkStyle(url.url)
+    fastUrls.forEach((m) => { // 加载
+        if (m.cssOnly) {
+            includeLinkStyle(m.url)
+        } else {
+            includeJavaScript(m.url, m.esModule)
         }
     })
 }

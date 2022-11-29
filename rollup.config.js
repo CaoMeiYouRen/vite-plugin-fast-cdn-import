@@ -115,7 +115,7 @@ export default defineConfig([
         output: [
             {
                 file: 'dist/client.js', // 生成 esm
-                format: 'esm',
+                format: 'iife',
                 name: upperFirst(camelCase(`${name}_client`)),
                 sourcemap: false,
             },
