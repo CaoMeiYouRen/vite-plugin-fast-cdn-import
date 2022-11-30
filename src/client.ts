@@ -58,6 +58,17 @@ async function getFastCdn(cdnUrls: string[], module: Module): Promise<FastUrl | 
     try {
         const { name, version, path, cssOnly, esModule } = module
         const urls = cdnUrls.map((cdnUrl) => renderUrl(cdnUrl, { name, version, path }))
+        if (!urls.length) { // 如果没有配置 cdn，跳过竞速
+            console.error(`包 ${name} 未能获取到最快 CDN`)
+            return null
+        }
+        if (urls.length === 1) {  // 如果只有一个 cdn，跳过竞速
+            return {
+                cssOnly,
+                esModule,
+                url: urls[0],
+            }
+        }
         const fast = await getFastUrl(urls)
         if (!fast) {
             console.error(`包 ${name} 未能获取到最快 CDN`)
@@ -138,9 +149,9 @@ function includeJavaScript(url: string, esModule?: boolean) {
     if (esModule) {
         script.type = 'module'
     }
-    // document.getElementsByTagName('head')?.[0]?.appendChild(script)\
-    const s = document.getElementsByTagName('script')[0]
-    s.parentNode.insertBefore(script, s)
+    document.getElementsByTagName('head')?.[0]?.appendChild(script)
+    // const s = document.getElementsByTagName('script')[0]
+    // s.parentNode.insertBefore(script, s)
     return script
 }
 

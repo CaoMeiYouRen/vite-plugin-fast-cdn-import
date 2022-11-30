@@ -37,11 +37,11 @@ export function vitePluginFastCdnImport(options: Options): Plugin {
             if (command === 'build') {
                 isBuild = true
                 const externalMap = Object.fromEntries(modules.filter((m) => m.var && !m.cssOnly).map((m) => [m.name, m.var]))
-                const externalLibs = Object.keys(externalMap)
+                // const externalLibs = Object.keys(externalMap)
                 const userConfig: UserConfig = {
                     build: {
                         rollupOptions: {
-                            external: [...externalLibs],
+                            // external: [...externalLibs],
                             plugins: [externalGlobals(externalMap)],
                         },
                     },
