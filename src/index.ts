@@ -5,6 +5,7 @@ import externalGlobals from 'rollup-plugin-external-globals'
 import md5 from 'md5'
 import { Plugin, UserConfig } from 'vite'
 import { Options } from './types'
+import { renderUrl } from './utils'
 
 const DEFAULT_CDN_URLS = [
     'https://npm.elemecdn.com/:name@:version/:path',
@@ -27,7 +28,7 @@ function getModuleVersion(name: string): string {
 }
 
 export function vitePluginFastCdnImport(options: Options): Plugin {
-    const { modules = [], cdnUrls = DEFAULT_CDN_URLS, disabled = false, allRace = false, disabledCache = false } = options
+    const { modules = [], cdnUrls = DEFAULT_CDN_URLS, disabled = false, allRace = false, disabledCache = false, enableImportMap = false } = options
     const cacheKey = options.cacheKey || md5(`${cdnUrls.join(',')}__${modules.map((e) => `${e.name}@${e.version}/${e.path}`).join(',')}`).slice(0, 8)
     let isBuild = false
     return {
@@ -37,12 +38,15 @@ export function vitePluginFastCdnImport(options: Options): Plugin {
             if (command === 'build') {
                 isBuild = true
                 const externalMap = Object.fromEntries(modules.filter((m) => m.var && !m.cssOnly).map((m) => [m.name, m.var]))
-                // const externalLibs = Object.keys(externalMap)
+                const externalLibs = Object.keys(externalMap)
                 const userConfig: UserConfig = {
                     build: {
                         rollupOptions: {
-                            // external: [...externalLibs],
-                            plugins: [externalGlobals(externalMap)],
+                            external: [...externalLibs],
+                            // plugins: [externalGlobals(externalMap)],
+                            output: {
+                                globals: externalMap,
+                            },
                         },
                     },
                 }
@@ -66,7 +70,21 @@ export function vitePluginFastCdnImport(options: Options): Plugin {
                 }
                 return m.cssOnly // 开发模式下仅载入 css
             })
-            const code = `\n<script>${injectJs.replace('window.__FAST_CDN_URLS__', JSON.stringify(cdnUrls))
+            let importMapHtml = ''
+            if (enableImportMap) {
+                const importmap = {
+                    imports: Object.fromEntries(
+                        cdnModules
+                            .filter((m) => m.esModule)
+                            .map((m) => [
+                                m.name,
+                                cdnUrls.map((url) => renderUrl(url, { ...m }))[0],
+                            ]),
+                    ),
+                }
+                importMapHtml = `\n<script type="importmap">${JSON.stringify(importmap)}</script>`
+            }
+            const code = `${importMapHtml}\n<script>${injectJs.replace('window.__FAST_CDN_URLS__', JSON.stringify(cdnUrls))
                 .replace('window.__FAST_CDN_MODULES__', JSON.stringify(cdnModules))
                 .replace('window.__FAST_CDN_ALL_RACE__', JSON.stringify(allRace))
                 .replace('window.__FAST_CDN_CACHE_KEY__', JSON.stringify(cacheKey))

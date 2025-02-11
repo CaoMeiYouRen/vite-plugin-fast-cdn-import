@@ -1,10 +1,5 @@
 import { FastUrl, Module } from './types'
-
-function renderUrl(url: string, info: { name: string, version: string, path: string }) {
-    const { name, version, path } = info
-    return url.replace(':name', name).replace(':version', version).replace(':path', path)
-}
-
+import { renderUrl } from './utils'
 /**
  * 获取所有包最快的源，获取失败的包返回空字符串
  *
@@ -187,7 +182,7 @@ async function init() {
         if (m.cssOnly) {
             includeLinkStyle(m.url)
         } else {
-            includeJavaScript(m.url, m.esModule)
+            // includeJavaScript(m.url, m.esModule)
         }
     })
 }

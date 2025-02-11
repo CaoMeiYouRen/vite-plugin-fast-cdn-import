@@ -89,6 +89,13 @@ export interface Options {
      * @date 2022-11-20
      */
     cacheKey?: string
+    /**
+     * 启用 importmap，仅 js 模块可用
+     *
+     * @author CaoMeiYouRen
+     * @date 2022-11-30
+     */
+    enableImportMap?: boolean
 }
 
 export interface FastUrl {
