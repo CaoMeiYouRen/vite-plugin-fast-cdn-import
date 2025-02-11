@@ -1,5 +1,12 @@
 # vite-plugin-fast-cdn-import
 
+## [1.2.1](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import/compare/v1.2.0...v1.2.1) (2022-11-30)
+
+
+### 🐛 Bug 修复
+
+* 优化 对没有配置 cdn、仅配置 1 个 cdn 情况的载入；修复 排除的依赖不全局加载的问题；更新文档 ([6bbf75e](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import/commit/6bbf75e))
+
 # [1.2.0](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import/compare/v1.1.3...v1.2.0) (2022-11-29)
 
 
