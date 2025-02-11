@@ -1,5 +1,12 @@
 # vite-plugin-fast-cdn-import
 
+# [1.3.0](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import/compare/v1.2.1...v1.3.0) (2025-02-11)
+
+
+### ✨ 新功能
+
+* 添加 importmap 支持并重构 renderUrl 函数；优化插件配置选项 ([1b09298](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import/commit/1b09298))
+
 ## [1.2.1](https://github.com/CaoMeiYouRen/vite-plugin-fast-cdn-import/compare/v1.2.0...v1.2.1) (2022-11-30)
 
 
