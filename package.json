@@ -102,5 +102,13 @@
   },
   "peerDependencies": {
     "vite": ">=2"
+  },
+  "pnpm": {
+    "overrides": {
+      "semver-regex": "^3.1.4",
+      "serialize-javascript": "^6.0.2",
+      "esbuild": "^0.25.0",
+      "micromatch": "^4.0.8"
+    }
   }
 }
