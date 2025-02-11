@@ -105,6 +105,9 @@ importers:
       rollup-plugin-analyzer:
         specifier: ^4.0.0
         version: 4.0.0
+      rollup-plugin-dts:
+        specifier: ^6.1.1
+        version: 6.1.1(rollup@2.79.2)(typescript@4.9.5)
       rollup-plugin-terser:
         specifier: ^7.0.2
         version: 7.0.2(rollup@2.79.2)
@@ -2782,6 +2785,13 @@ packages:
   rollup-plugin-analyzer@4.0.0:
     resolution: {integrity: sha512-LL9GEt3bkXp6Wa19SNR5MWcvHNMvuTFYg+eYBZN2OIFhSWN+pEJUQXEKu5BsOeABob3x9PDaLKW7w5iOJnsESQ==}
     engines: {node: '>=8.0.0'}
+
+  rollup-plugin-dts@6.1.1:
+    resolution: {integrity: sha512-aSHRcJ6KG2IHIioYlvAOcEq6U99sVtqDDKVhnwt70rW6tsz3tv5OSjEiWcgzfsHdLyGXZ/3b/7b/+Za3Y6r1XA==}
+    engines: {node: '>=16'}
+    peerDependencies:
+      rollup: ^3.29.4 || ^4
+      typescript: ^4.5 || ^5.0
 
   rollup-plugin-external-globals@0.7.3:
     resolution: {integrity: sha512-rOxtHUyIYR06kV2H5xhxIjbmdfQ7YGw/LUPFzxi9qwUqTqnbBUbZlVpkc5hs13b8KVO20Zkb+LzT2TGpJgRaIg==}
@@ -6291,6 +6301,14 @@ snapshots:
       glob: 7.2.3
 
   rollup-plugin-analyzer@4.0.0: {}
+
+  rollup-plugin-dts@6.1.1(rollup@2.79.2)(typescript@4.9.5):
+    dependencies:
+      magic-string: 0.30.17
+      rollup: 2.79.2
+      typescript: 4.9.5
+    optionalDependencies:
+      '@babel/code-frame': 7.26.2
 
   rollup-plugin-external-globals@0.7.3(rollup@2.79.2):
     dependencies:

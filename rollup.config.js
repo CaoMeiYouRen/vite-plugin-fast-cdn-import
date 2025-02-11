@@ -6,6 +6,7 @@ import typescript from '@rollup/plugin-typescript'
 import json from '@rollup/plugin-json'
 import analyzer from 'rollup-plugin-analyzer'
 import replace from '@rollup/plugin-replace'
+import dts from 'rollup-plugin-dts'
 import { dependencies, peerDependencies, name } from './package.json'
 
 const upperFirst = (str) => (str ? str.charAt(0).toUpperCase() + str.slice(1) : '')
@@ -79,18 +80,13 @@ function getPlugins({ isBrowser = false, isMin = false, isDeclaration = false })
 export default defineConfig([
     {
         input: 'src/index.ts', // 生成类型文件
-        external,
         output: {
             dir: 'dist',
             format: 'esm',
             name: outputName,
-            sourcemap: sourceMap,
+            // sourcemap: sourceMap,
         },
-        plugins: getPlugins({
-            isBrowser: false,
-            isDeclaration: true,
-            isMin: false,
-        }),
+        plugins: [dts()],
     },
     {
         input: 'src/index.ts',
